@@ -3,7 +3,10 @@ package arcade;
 public class arcadeMain {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
+		AnimationTetris p = new AnimationTetris();
+		
+		
 		System.out.println("hi");
 	}
 
