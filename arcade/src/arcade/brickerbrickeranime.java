@@ -26,14 +26,17 @@ public class brickerbrickeranime extends JPanel {
 	int y2=1;
 	boolean left,right,up,down=false;
 	Image ball, paddle1;
-	Image bricks ;
-	Image bArray[];
+	Image[] bricks ;
+	
 	brickerbrickeranime(){
+		bricky=5;
+		brickx=5;
 		this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 		this.setLocation(brickx, bricky);
 		paddle1=new ImageIcon("paddle.png").getImage();
-		bricks=new ImageIcon("brick.png").getImage();
+		bricks=new Image[10];
 		ball=new ImageIcon("ball.png").getImage();
+		
 		this.addKeyListener(new KeyListener() {
 		
 		
@@ -74,13 +77,8 @@ public class brickerbrickeranime extends JPanel {
 			}
 			
 		});
-		bricks=new ImageIcon("brick.png").getImage();
-		for(int i=0;i<50;i++) {
-			bArray[i]=bricks;
-			if(i>10||i>20||i>30||i>40) {
-				bricky = bricky + 2;
-			}
-		}
+		
+		
 		timer = new Timer(5, new ActionListener() {
 
 			@Override
@@ -111,9 +109,19 @@ public class brickerbrickeranime extends JPanel {
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
 		
-		
+		for(int i=0;i<10;i++) {
+			bricks[i]=new ImageIcon("brick.png").getImage();
+			if(i==10||i==20||i==30||i==40) {
+				bricky+=17;
+				brickx=5;
+			}else {
+				brickx+=35;
+			}
+			g2d.drawImage(bricks[i],brickx,bricky,null);
+			
+		}
 		if(right) {
-		g2d.drawImage(paddle1,x2,y2,null);
+			g2d.drawImage(paddle1,x2,y2,null);
 		}else if(left) {
 			g2d.drawImage(paddle1,x2,y2,null);
 		}
