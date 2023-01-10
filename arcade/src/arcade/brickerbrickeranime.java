@@ -34,7 +34,7 @@ public class brickerbrickeranime extends JPanel {
 		this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 		this.setLocation(brickx, bricky);
 		paddle1=new ImageIcon("paddle.png").getImage();
-		bricks=new Image[10];
+		bricks=new Image[20];
 		ball=new ImageIcon("ball.png").getImage();
 		
 		this.addKeyListener(new KeyListener() {
@@ -109,13 +109,16 @@ public class brickerbrickeranime extends JPanel {
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
 		
-		for(int i=0;i<10;i++) {
+		for(int i=0;i<5;i++) {
 			bricks[i]=new ImageIcon("brick.png").getImage();
 			if(i==10||i==20||i==30||i==40) {
 				bricky+=17;
 				brickx=5;
 			}else {
 				brickx+=35;
+				if(brickx>750) {
+					brickx=5;
+				}
 			}
 			g2d.drawImage(bricks[i],brickx,bricky,null);
 			
