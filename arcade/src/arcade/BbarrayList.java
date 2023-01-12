@@ -9,12 +9,12 @@ public class BbarrayList {
 	int bricksx;
 	int x,y;
 	int bricksy;
-	public BbarrayList(){
-		bricks = new ImageIcon("brick.png").getImage();
-		x=5;
-		y=5;
-		bricksx=20;
-		bricksy=20;
+	int numofb;
+	public BbarrayList(Image b,int bxx,int byy,int num){
+		bricks=b;
+		bricksx=bxx;
+		bricksy=byy;
+		numofb=num;
 	}
 	public Image addbrick() {
 		return bricks;
