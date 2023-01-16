@@ -1,6 +1,8 @@
 package arcade;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -19,8 +21,7 @@ public class TetrisPanel extends JPanel{
 	final int WIDTH = 400;
 	final int HEIGHT = 400;
 	
-	Image bgImage, rSquare, gSquare, pSquare, bSquare;
-	int score;
+	Image bgImage, rSquare, gSquare, pSquare, bSquare, randomSquare;
 
 	Timer timer, timer2; 
 	
@@ -34,11 +35,17 @@ public class TetrisPanel extends JPanel{
 
 	LBlock l = new LBlock();
 	TBlock t = new TBlock();
-	
-	int x = 295;
+	ZShape z = new ZShape();
+	OBlock o = new OBlock();
+	int x = 296;
 	int y = 29	;
 	
+	int score =0;
+	String stScore;
+	
+	int num = 0;
 	int random = 0;
+	
 	int[][] temp = new int[3][3];
 	int tempx=0;
 	int tempy=0;
@@ -48,9 +55,33 @@ public class TetrisPanel extends JPanel{
 	
 	
 	TetrisPanel(){
-		Random r = new Random();
 		
-		random = r.nextInt(2)+1;
+		bgImage = new ImageIcon("TetrisBG.png").getImage();
+		rSquare = new ImageIcon("redBlock.png").getImage();
+		bSquare = new ImageIcon("blueBlock.png").getImage();
+		gSquare = new ImageIcon("greenBlock.png").getImage();
+		pSquare = new ImageIcon("purpleBlock.png").getImage();
+		
+		
+		Random r = new Random();
+		Random colorR = new Random();
+		
+		num = r.nextInt(4)+1;
+		if(num == 1) {
+			randomSquare = rSquare;
+			
+		}else if(num == 2) {
+			randomSquare = gSquare;
+			
+		}else if (num == 3) {
+			randomSquare = bSquare;
+			
+		}else if(num == 4) {
+			randomSquare = pSquare;
+			
+		}
+		
+		random = r.nextInt(1)+1;
 		System.out.println("Random Number is: "+random);
 		
 		if(random == 1) {
@@ -60,6 +91,15 @@ public class TetrisPanel extends JPanel{
 		}else if(random == 2) {
 			t.upShape();
 			temp = t.getShape();
+			
+		}else if(random == 3) {
+			z.upShape();
+			temp = z.getShape();
+			
+		}else if(random == 4) {
+			
+			o.upShape();
+			temp = o.getShape();
 		}
 
 		
@@ -78,20 +118,32 @@ public class TetrisPanel extends JPanel{
 			public void keyPressed(KeyEvent e) {
 				switch(e.getKeyCode()) {
 				//left arrow
-				case 37: x-=27; break;
+				case 37:
+				if(x > 227) {
+					x-=27;
+				}
+				break;
 				
 				//up arrow
 				case 38: turn +=1;
 					if(turn == 5) {
-						turn =1;
+						turn = 1;
 					}
 				break;
 				
 				//right arrow
-				case 39: x+= 27; break;
-				
+				case 39:
+				if(x < 431) {
+					x+= 27;
+				}
+				break;
 				//down arrow
-				case 40: downArrow = true;break;
+				case 40: 				
+					if(y < 600) {
+						y+= 27;
+						System.out.println(y);
+					}
+				break;
 				
 				case 49: spaceBar = true;break;
 				
@@ -100,17 +152,112 @@ public class TetrisPanel extends JPanel{
 				default: System.out.println(e.getKeyCode());
 				}
 				
-				if(turn==1) {
-					l.upShape();
-				}else if(turn==2) {
-					l.rightShape();
-				}else if(turn==3) {
-					l.downShape();
-				}else if(turn ==4){
-					l.leftShape();
+				
+				if(random == 1) {
+					
+					if(turn==1) {
+						
+						l.upShape();
+						
+					}else if(turn==2) {
+						
+						if(x <227) {
+							x+=27;
+							
+						}
+							
+						l.rightShape();
+						
+					}else if(turn==3) {
+						
+						System.out.println(x);
+						if(x < 227) {
+							x+= 27;
+						}
+						
+						l.downShape();
+					}else if(turn ==4){
+						
+						if(x < 227) {
+							x+= 27;
+							
+						}
+						
+						l.leftShape();
+					}
+					
+					temp = l.getShape();
+					
+				}else if(random == 2) {
+					
+					if(turn==1) {
+						
+						if(x < 240) {
+							x+= 27;
+						}
+						
+						t.upShape();
+					}else if(turn==2) {
+						
+						
+						t.rightShape();
+					}else if(turn==3) {
+						
+						if(x < 240) {
+							x+= 27;
+						}
+
+						t.downShape();
+					}else if(turn ==4){
+						
+						if(x < 240) {
+							x+= 27;
+						}
+						
+						t.leftShape();
+					}
+					
+					temp = t.getShape();
+					
+				}else if(random == 3) {
+					
+					if(turn==1) {
+						
+						if(x < 240) {
+							x+= 27;
+						}
+						
+						z.upShape();
+					}else if(turn==2) {
+						
+						
+						z.rightShape();
+					}else if(turn==3) {
+						
+						if(x < 240) {
+							x+= 27;
+						}
+						
+						z.downShape();
+					}else if(turn ==4){
+						
+						if(x < 240) {
+							x+= 27;
+						}
+						
+						z.leftShape();
+					}
+					
+					temp = z.getShape();
+					
+				}else if(random == 4) {
+					if(x < 240) {
+						x+= 27;
+					}
+					
+					temp = o.getShape();
 				}
 				
-				temp = l.getShape();
 				System.out.println(turn);
 			}
 
@@ -147,6 +294,15 @@ public class TetrisPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
+				if(temp[2][0] == 0 || temp[2][1] == 0 || temp [2][2] == 0) {
+					
+				}
+				
+				
+				
+				
+				
+				//stScore = Integer.toString(score);
 				repaint();
 			}
 			
@@ -159,12 +315,15 @@ public class TetrisPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				
-				y+= 27;
+				if(y <= 600) {
+					y+= 27;
+				}
+				
 			}
 			
 		});
 		
-		timer2.start();
+		//timer2.start();
 	}
 	
 	public void paint(Graphics g) {
@@ -172,58 +331,65 @@ public class TetrisPanel extends JPanel{
 		
 		g2D.drawImage(bgImage, 0, 0, null);
 		
+		/**
+		Font font = new Font("Serif", Font.PLAIN, 40);		
+		g2D.setFont(font);
+		g2D.setColor(Color.white);
+		g2D.drawString(stScore, 50,100);
+		*/
+		
 		if(temp[0][0] == 1) {
 			tempx=x-26;
 			tempy=y-26;
-			g2D.drawImage(rSquare, tempx, tempy, null);
+			g2D.drawImage(randomSquare, tempx, tempy, null);
 			
 		}
 		if(temp[1][0] == 1) {
 			tempx=x;
 			tempy=y-26;
-			g2D.drawImage(rSquare, tempx, tempy, null);
+			g2D.drawImage(randomSquare, tempx, tempy, null);
 			
 		}
 		if(temp[2][0] == 1) {
 			tempx=x+26;
 			tempy=y-26;
-			g2D.drawImage(rSquare, tempx, tempy, null);
+			g2D.drawImage(randomSquare, tempx, tempy, null);
 			
 		}
 		if(temp[0][1] == 1) {
 			tempx = x-26;
 			tempy = y;
-			g2D.drawImage(rSquare, tempx, tempy, null);
+			g2D.drawImage(randomSquare, tempx, tempy, null);
 			
 		}
 		if(temp[1][1] == 1) {
 			tempx=x;
 			tempy=y;
-			g2D.drawImage(rSquare, tempx, tempy, null);
+			g2D.drawImage(randomSquare, tempx, tempy, null);
 			
 		}
 		if(temp[2][1] == 1) {
 			tempx=x+26;
 			tempy=y;
-			g2D.drawImage(rSquare, tempx, tempy, null);
+			g2D.drawImage(randomSquare, tempx, tempy, null);
 			
 		}
 		if(temp[0][2] == 1) {
 			tempx = x-26;
 			tempy = y+26;
-			g2D.drawImage(rSquare, tempx, tempy, null);
+			g2D.drawImage(randomSquare, tempx, tempy, null);
 			
 		}
 		if(temp[1][2] == 1) {
 			tempx = x;
 			tempy = y+26;
-			g2D.drawImage(rSquare, tempx, tempy, null);
+			g2D.drawImage(randomSquare, tempx, tempy, null);
 			
 		}
 		if(temp[2][2] == 1) {
 			tempx=x+26;
 			tempy=y+26;
-			g2D.drawImage(rSquare, tempx, tempy, null);
+			g2D.drawImage(randomSquare, tempx, tempy, null);
 			
 		}
 		

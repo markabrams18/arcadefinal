@@ -28,7 +28,6 @@ public class TBlock {
 		TShape[1][0]= 1;
 		TShape[2][0]= 1;
 		TShape[1][1]= 1;
-		TShape[1][2]= 1;
 		
 	}
 	
@@ -43,7 +42,7 @@ public class TBlock {
 		TShape[0][1]= 1;
 		TShape[0][2]= 1;
 		TShape[1][1]= 1;
-		TShape[2][1]= 1;
+
 	}
 	
 	
@@ -58,7 +57,7 @@ public class TBlock {
 		TShape[1][2]= 1;
 		TShape[2][2]= 1;
 		TShape[1][1]= 1;
-		TShape[1][0]= 1;
+
 		
 	}
 	
@@ -73,7 +72,7 @@ public class TBlock {
 		TShape[2][1]= 1;
 		TShape[2][2]= 1;
 		TShape[1][1]= 1;
-		TShape[0][1]= 1;
+
 	}
 	
 	public int[][] getShape(){

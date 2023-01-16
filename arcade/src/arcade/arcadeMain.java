@@ -3,7 +3,6 @@ package arcade;
 public class arcadeMain {
 
 	public static void main(String[] args) {
-		LBlock b = new LBlock();
 		AnimationTetris p = new AnimationTetris();
 		//brickbreaker b = new brickbreaker();
 		
