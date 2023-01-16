@@ -25,4 +25,13 @@ public class BbarrayList {
 	public int by() {
 		return bricksy;
 	}
+	public int numofi() {
+		return numofb;
+	}
+	public int BrickWidth() {
+		return bricks.getWidth(null);
+	}
+	public int BrickHeight() {
+		return bricks.getWidth(null);
+	}
 }

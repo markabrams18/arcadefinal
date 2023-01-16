@@ -1,6 +1,8 @@
 package arcade;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -20,13 +22,17 @@ public class brickerbrickeranime extends JPanel {
 	Timer timer;
 	int xSpeed=5;
 	int ySpeed=5;
-	int xb,yb,sb;
+	int sbx,sby=0;
+	int xb=400,yb=730;
 	int brickx,bricky;
 	int x=400;
 	int y=750;
 	int x2=15;
 	int y2=15;
 	boolean left,right=false;
+	boolean win=false;
+	boolean lose=false;
+	
 	Image ball, paddle1,bbbg;
 	Image brick ;
 	ArrayList<BbarrayList> bricks;
@@ -51,6 +57,8 @@ public class brickerbrickeranime extends JPanel {
 				y2+=40;
 			}
 		}
+		sbx=5;
+		sby=-5;
 		this.addKeyListener(new KeyListener() {
 		
 		
@@ -58,11 +66,13 @@ public class brickerbrickeranime extends JPanel {
 			public void keyTyped(KeyEvent e) {
 				if(e.getKeyChar()=='a') {
 					x-=xSpeed;
+					
 				}
 			
 				
 				if(e.getKeyChar()=='d') {
 					x+=xSpeed;
+				
 				}
 			}
 
@@ -98,16 +108,45 @@ public class brickerbrickeranime extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
-				
+				if(xb>WIDTH-ball.getWidth(null)-10||xb<0) {
+					sbx=sbx*-1;
+				}else if(yb<0) {
+					sby=sby*-1;
+				}else if(yb>HEIGHT-ball.getHeight(null)-30) {
+					sby=0;
+					sbx=0;
+					lose=true;
+				}
+				xb=xb+sbx;
+				yb=yb+sby;
+				if(xb<x+paddle1.getWidth(null)&&x<xb+ball.getWidth(null)&&yb<y+paddle1.getHeight(null)&&y<yb+ball.getHeight(null)) {
+					sbx=sbx*-1;
+					sby=sby*-1;
+				}
+				for(int i=0;i<bricks.size();i++) {
+					if(xb<bricks.get(i).bx()+bricks.get(i).BrickWidth()&&bricks.get(i).bx()<xb+ball.getWidth(null)&&yb<bricks.get(i).by()+bricks.get(i).BrickHeight()-10&&bricks.get(i).by()<yb+ball.getHeight(null)) {
+						System.out.println(bricks.get(i).bricksx+bricks.get(i).bricksy);
+						sby=sby*-1;
+						bricks.remove(i);
+					}
+				}
 				if(left) {
-					x-=5;
-					
+					x-=xSpeed;
+					if(x<0) {
+						x+=10;
+					}
+				
 				}
+			
 				if(right) {
-					x+=5;
+					x+=xSpeed;
+					if(x>675) {
+						x-=10;
+					}
 					
+				
 				}
+				
 		
 				repaint();
 			}
@@ -130,7 +169,14 @@ public class brickerbrickeranime extends JPanel {
 		
 		g2d.drawImage(paddle1, x, y, null);
 		g2d.drawImage(ball,xb,yb,null);
-			
+		if(win) {
+			Font font = new Font("Serif",Font.PLAIN,40);
+			g2d.setFont(font);
+			g2d.setColor(Color.BLACK);
+			g2d.drawString("You win", 400, 400);
+		}else if(lose==true){
+			g2d.drawString("you lose",400,400);
+		}
 			
 		
 	
