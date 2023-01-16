@@ -50,7 +50,7 @@ public class brickerbrickeranime extends JPanel {
 		for(int i=0;i<46;i++) {
 			int temp=i;
 			bricks.add(new BbarrayList(brick,x2,y2,temp));
-			System.out.println(bricks.get(i).bx()+"||"+ bricks.get(i).by());
+			
 			x2+=33;
 			if(x2>760) {
 				x2=15;
@@ -78,7 +78,7 @@ public class brickerbrickeranime extends JPanel {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				System.out.println(e.getKeyCode());
+				
 				switch(e.getKeyCode()) {
 				case 65: left=true; break;
 				
@@ -120,12 +120,33 @@ public class brickerbrickeranime extends JPanel {
 				xb=xb+sbx;
 				yb=yb+sby;
 				if(xb<x+paddle1.getWidth(null)&&x<xb+ball.getWidth(null)&&yb<y+paddle1.getHeight(null)&&y<yb+ball.getHeight(null)) {
-					sbx=sbx*-1;
+				
+					if(x-xb<paddle1.getWidth(null)*0.1) {
+						sbx=sbx*-1;
+					}else if(x-xb<paddle1.getWidth(null)*0.2) {
+						sbx= (int) (sbx*-0.75);
+					}else if(x-xb<paddle1.getWidth(null)*0.3) {
+						sbx=(int) (sbx*-0.5);
+					}else if(x-xb<paddle1.getWidth(null)*0.4) {
+						sbx=(int) (sbx*-0.25);
+					}else if(x-xb<paddle1.getWidth(null)*0.5) {
+						sbx=sbx*0;
+					}else if(x-xb<paddle1.getWidth(null)*0.6) {
+						sbx=sbx*0;
+					}else if(x-xb<paddle1.getWidth(null)*0.7) {
+						sbx=(int)(sbx*0.25);
+					}else if(x-xb<paddle1.getWidth(null)*0.8) {
+						sbx=(int) (sbx*0.5);
+					}else if(x-xb<paddle1.getWidth(null)/0.9) {
+						sbx=(int) (sbx*0.75);
+					}else {
+						sbx=sbx*1;
+					}
 					sby=sby*-1;
 				}
 				for(int i=0;i<bricks.size();i++) {
 					if(xb<bricks.get(i).bx()+bricks.get(i).BrickWidth()&&bricks.get(i).bx()<xb+ball.getWidth(null)&&yb<bricks.get(i).by()+bricks.get(i).BrickHeight()-10&&bricks.get(i).by()<yb+ball.getHeight(null)) {
-						System.out.println(bricks.get(i).bricksx+bricks.get(i).bricksy);
+						
 						sby=sby*-1;
 						bricks.remove(i);
 					}
