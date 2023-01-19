@@ -13,12 +13,14 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class brickerbrickeranime extends JPanel {
 	final int WIDTH=800;
 	final int HEIGHT =800;
+	JButton start;
 	Timer timer;
 	int xSpeed=5;
 	int ySpeed=5;
@@ -40,14 +42,17 @@ public class brickerbrickeranime extends JPanel {
 	
 	public brickerbrickeranime(){
 		bricks= new ArrayList<BbarrayList>();
-	
+		start = new JButton();
+		
 		this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
-		this.setLocation(brickx, bricky);
+		this.setLocation(0, 0);
 		this.setFocusable(true);
 		paddle1=new ImageIcon("paddle.png").getImage();
 		brick= new ImageIcon("brick.png").getImage();
 		ball=new ImageIcon("ball.png").getImage();
 		bbbg=new ImageIcon("bbbg.png").getImage();
+		
+	
 		for(int i=0;i<46;i++) {
 			int temp=i;
 			bricks.add(new BbarrayList(brick,x2,y2,numOfB));
@@ -114,7 +119,7 @@ public class brickerbrickeranime extends JPanel {
 					sbx=sbx*-1;
 				}else if(yb<0) {
 					sby=sby*-1;
-				}else if(yb>HEIGHT-ball.getHeight(null)-30) {
+				}else if(yb>HEIGHT-ball.getHeight(null)-35) {
 					sby=0;
 					sbx=0;
 					lose=true;
@@ -175,8 +180,7 @@ public class brickerbrickeranime extends JPanel {
 					
 				
 				}
-				
-		
+	
 				repaint();
 			}
 			
@@ -191,6 +195,7 @@ public class brickerbrickeranime extends JPanel {
 	public void paint(Graphics g) {
 		
 		Graphics2D g2d = (Graphics2D)g;
+		
 		g2d.drawImage(bbbg,0,0,null);
 		for(int i=0;i<bricks.size();i++) {
 			g2d.drawImage(((BbarrayList) bricks.get(i)).addbrick(), ((BbarrayList) bricks.get(i)).bx(), ((BbarrayList) bricks.get(i)).by(),null);
