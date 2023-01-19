@@ -37,22 +37,35 @@ public class TetrisPanel extends JPanel{
 	TBlock t = new TBlock();
 	ZShape z = new ZShape();
 	OBlock o = new OBlock();
-	int x = 296;
-	int y = 29	;
-	
-	int score =0;
+	//297
+	int x =52;
+	int y = 26;
+	//29
+	int score = 0;
 	String stScore;
+	
+	private final int blockSize = 26;
+	
+	private final int brdWidth = 10;
+	private final int brdHeight = 24;
+	
+	
 	
 	int num = 0;
 	int random = 0;
 	
 	int[][] temp = new int[3][3];
-	int tempx=0;
-	int tempy=0;
+	
+	int tempx = 2;
+	int tempy = 0;
+	
 	int turn = 1;
-	int[][] currPos = new int[10][24];
+	int[][] tempSetUp = new int[12][25];
+	int[][] currPos = new int[12][25];
 	int lineCount = 1;
 	
+	boolean flag = true;
+	boolean once = true;
 	
 	TetrisPanel(){
 		
@@ -67,40 +80,13 @@ public class TetrisPanel extends JPanel{
 		Random colorR = new Random();
 		
 		num = r.nextInt(4)+1;
-		if(num == 1) {
-			randomSquare = rSquare;
-			
-		}else if(num == 2) {
-			randomSquare = gSquare;
-			
-		}else if (num == 3) {
-			randomSquare = bSquare;
-			
-		}else if(num == 4) {
-			randomSquare = pSquare;
-			
-		}
 		
-		random = r.nextInt(1)+1;
+		System.out.println("Random Num Color Is: " + num);
+
+		
+		random = r.nextInt(4)+1;
 		System.out.println("Random Number is: "+random);
 		
-		if(random == 1) {
-			l.upShape();
-			temp = l.getShape();
-			
-		}else if(random == 2) {
-			t.upShape();
-			temp = t.getShape();
-			
-		}else if(random == 3) {
-			z.upShape();
-			temp = z.getShape();
-			
-		}else if(random == 4) {
-			
-			o.upShape();
-			temp = o.getShape();
-		}
 
 		
 		this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
@@ -119,8 +105,9 @@ public class TetrisPanel extends JPanel{
 				switch(e.getKeyCode()) {
 				//left arrow
 				case 37:
-				if(x > 227) {
-					x-=27;
+				if(x > 0) {
+					x-=26;
+					System.out.println(x);
 				}
 				break;
 				
@@ -133,14 +120,14 @@ public class TetrisPanel extends JPanel{
 				
 				//right arrow
 				case 39:
-				if(x < 431) {
-					x+= 27;
+				if(x < 200) {
+					x+= 26;
 				}
 				break;
 				//down arrow
 				case 40: 				
-					if(y < 600) {
-						y+= 27;
+					if(y < 572) {
+						y+= 26;
 						System.out.println(y);
 					}
 				break;
@@ -152,113 +139,7 @@ public class TetrisPanel extends JPanel{
 				default: System.out.println(e.getKeyCode());
 				}
 				
-				
-				if(random == 1) {
-					
-					if(turn==1) {
-						
-						l.upShape();
-						
-					}else if(turn==2) {
-						
-						if(x <227) {
-							x+=27;
-							
-						}
-							
-						l.rightShape();
-						
-					}else if(turn==3) {
-						
-						System.out.println(x);
-						if(x < 227) {
-							x+= 27;
-						}
-						
-						l.downShape();
-					}else if(turn ==4){
-						
-						if(x < 227) {
-							x+= 27;
-							
-						}
-						
-						l.leftShape();
-					}
-					
-					temp = l.getShape();
-					
-				}else if(random == 2) {
-					
-					if(turn==1) {
-						
-						if(x < 240) {
-							x+= 27;
-						}
-						
-						t.upShape();
-					}else if(turn==2) {
-						
-						
-						t.rightShape();
-					}else if(turn==3) {
-						
-						if(x < 240) {
-							x+= 27;
-						}
 
-						t.downShape();
-					}else if(turn ==4){
-						
-						if(x < 240) {
-							x+= 27;
-						}
-						
-						t.leftShape();
-					}
-					
-					temp = t.getShape();
-					
-				}else if(random == 3) {
-					
-					if(turn==1) {
-						
-						if(x < 240) {
-							x+= 27;
-						}
-						
-						z.upShape();
-					}else if(turn==2) {
-						
-						
-						z.rightShape();
-					}else if(turn==3) {
-						
-						if(x < 240) {
-							x+= 27;
-						}
-						
-						z.downShape();
-					}else if(turn ==4){
-						
-						if(x < 240) {
-							x+= 27;
-						}
-						
-						z.leftShape();
-					}
-					
-					temp = z.getShape();
-					
-				}else if(random == 4) {
-					if(x < 240) {
-						x+= 27;
-					}
-					
-					temp = o.getShape();
-				}
-				
-				System.out.println(turn);
 			}
 
 			@Override
@@ -280,7 +161,7 @@ public class TetrisPanel extends JPanel{
 			
 		});
 		
-		bgImage = new ImageIcon("TetrisBG.png").getImage();
+		bgImage = new ImageIcon("blackBG.png").getImage();
 		rSquare = new ImageIcon("redBlock.png").getImage();
 		bSquare = new ImageIcon("blueBlock.png").getImage();
 		gSquare = new ImageIcon("greenBlock.png").getImage();
@@ -293,14 +174,175 @@ public class TetrisPanel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				if(temp[2][0] == 0 || temp[2][1] == 0 || temp [2][2] == 0) {
+				if(once) {
+					tempSetUp();
 					
+					
+					for(int j = 0; j < tempSetUp[0].length; j ++ ) {
+						for(int i = 0; i < tempSetUp.length; i ++) {
+							
+							
+							System.out.print(tempSetUp[i][j] + " ");
+						}
+						System.out.println(" ");
+					}
+					
+					once = false;
 				}
 				
 				
 				
 				
+				
+				
+				
+
+				
+				// gets the shape
+				
+					if(num == 1) {
+						randomSquare = rSquare;
+						
+					}else if(num == 2) {
+						randomSquare = gSquare;
+						
+					}else if (num == 3) {
+						randomSquare = bSquare;
+						
+					}else if(num == 4) {
+						randomSquare = pSquare;
+						
+					}
+					
+					if(random == 1) {
+						l.upShape();
+						temp = l.getShape();
+						
+					}else if(random == 2) {
+						t.upShape();
+						temp = t.getShape();
+						
+					}else if(random == 3) {
+						z.upShape();
+						temp = z.getShape();
+						
+					}else if(random == 4) {
+						
+						o.upShape();
+						temp = o.getShape();
+					}
+					
+					if(random == 1) {
+						
+						if(turn==1) {
+							
+							l.upShape();
+							
+						}else if(turn==2) {
+							
+							if(x < 0) {
+								x+=26;
+								
+							}
+								
+							l.rightShape();
+							
+						}else if(turn==3) {
+							
+							System.out.println(x);
+							if(x < 0) {
+								x+= 26;
+							}
+							
+							l.downShape();
+						}else if(turn ==4){
+							
+							if(x < 0) {
+								x+= 26;
+								
+							}
+							
+							l.leftShape();
+						}
+						
+						temp = l.getShape();
+						
+					}else if(random == 2) {
+						
+						if(turn==1) {
+							
+							if(x < 0) {
+								x+= 26;
+							}
+							
+							t.upShape();
+						}else if(turn==2) {
+							
+							
+							t.rightShape();
+						}else if(turn==3) {
+							
+							if(x < 0) {
+								x+= 26;
+							}
+
+							t.downShape();
+						}else if(turn ==4){
+							
+							if(x < 0) {
+								x+= 26;
+							}
+							
+							t.leftShape();
+						}
+						
+						temp = t.getShape();
+						
+					}else if(random == 3) {
+						
+						if(turn==1) {
+							
+							if(x < 0) {
+								x+= 26;
+							}
+							
+							z.upShape();
+						}else if(turn==2) {
+							
+							
+							z.rightShape();
+						}else if(turn==3) {
+							
+							if(x < 0) {
+								x+= 26;
+							}
+							
+							z.downShape();
+						}else if(turn ==4){
+							
+							if(x < 0) {
+								x+= 26;
+							}
+							
+							z.leftShape();
+						}
+						
+						temp = z.getShape();
+						
+					}else if(random == 4) {
+						if(x < 0) {
+							x+= 26;
+						}
+						
+						temp = o.getShape();
+					}
+					
+				
+				
+				
+				
+					
+					
 				
 				//stScore = Integer.toString(score);
 				repaint();
@@ -326,10 +368,55 @@ public class TetrisPanel extends JPanel{
 		//timer2.start();
 	}
 	
+	public void tempSetUp() {
+		for(int j = 0; j < tempSetUp[0].length; j ++ ) {
+			for(int i = 0; i < tempSetUp.length; i ++) {
+				
+				tempSetUp[i][j] = 0;
+				
+			}
+		}
+	}
+	
+	public void FinalSetUp() {
+		for(int j = 0; j < currPos[0].length; j ++ ) {
+			for(int i = 0; i < currPos.length; i ++) {
+				
+				currPos[i][j] = 0;
+				
+				if(i == 0 || i == 9) {
+					currPos[i][j] = 1;
+				}else if(j == 23) {
+					currPos[i][j] = 1;
+				}
+				System.out.print(currPos[i][j] + " ");
+			}
+			System.out.println(" ");
+		}
+
+		
+		
+		
+	}
+	
 	public void paint(Graphics g) {
 		Graphics2D g2D = (Graphics2D)g;
 		
 		g2D.drawImage(bgImage, 0, 0, null);
+		
+
+		g2D.setColor(Color.white);
+		
+		for(int i = 0; i <= brdHeight; i ++) {
+			
+			g2D.drawLine(0, i*blockSize, brdWidth*blockSize, i * blockSize);
+		}
+		
+		for(int i = 0; i <= brdWidth; i ++) {
+			
+			g2D.drawLine(i * blockSize, 0, i * blockSize, brdHeight*26);
+		}
+		
 		
 		/**
 		Font font = new Font("Serif", Font.PLAIN, 40);		
