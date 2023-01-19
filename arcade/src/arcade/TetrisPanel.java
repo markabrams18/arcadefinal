@@ -160,7 +160,7 @@ public class TetrisPanel extends JPanel{
 			}
 			
 		});
-		
+		//pictures
 		bgImage = new ImageIcon("blackBG.png").getImage();
 		rSquare = new ImageIcon("redBlock.png").getImage();
 		bSquare = new ImageIcon("blueBlock.png").getImage();
