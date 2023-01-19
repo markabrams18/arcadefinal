@@ -29,6 +29,7 @@ public class brickerbrickeranime extends JPanel {
 	int y=750;
 	int x2=15;
 	int y2=15;
+	int numOfB=0;
 	boolean left,right=false;
 	boolean win=false;
 	boolean lose=false;
@@ -49,8 +50,8 @@ public class brickerbrickeranime extends JPanel {
 		bbbg=new ImageIcon("bbbg.png").getImage();
 		for(int i=0;i<46;i++) {
 			int temp=i;
-			bricks.add(new BbarrayList(brick,x2,y2,temp));
-			System.out.println(bricks.get(i).bx()+"||"+ bricks.get(i).by());
+			bricks.add(new BbarrayList(brick,x2,y2,numOfB));
+			numOfB=i;
 			x2+=33;
 			if(x2>760) {
 				x2=15;
@@ -78,7 +79,7 @@ public class brickerbrickeranime extends JPanel {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				System.out.println(e.getKeyCode());
+				
 				switch(e.getKeyCode()) {
 				case 65: left=true; break;
 				
@@ -107,6 +108,7 @@ public class brickerbrickeranime extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				// TODO Auto-generated method stub
 				if(xb>WIDTH-ball.getWidth(null)-10||xb<0) {
 					sbx=sbx*-1;
@@ -120,12 +122,39 @@ public class brickerbrickeranime extends JPanel {
 				xb=xb+sbx;
 				yb=yb+sby;
 				if(xb<x+paddle1.getWidth(null)&&x<xb+ball.getWidth(null)&&yb<y+paddle1.getHeight(null)&&y<yb+ball.getHeight(null)) {
-					sbx=sbx*-1;
+				
+					if(x-xb<-85) {
+						sbx=xSpeed*1;
+					}else if(x-xb<-75&&x-xb>-85) {
+						sbx= (int) (xSpeed*1.75);
+					}else if(x-xb<-65&&x-xb>-75) {
+						sbx=(int) (xSpeed*1.5);
+					}else if(x-xb<-55&&x-xb>-65) {
+						sbx=(int) (xSpeed*1.25);
+					}else if(x-xb<-45&&x-xb>-55) {
+						sbx=sbx*1;
+					}else if(x-xb<-35&&x-xb>-45) {
+						sbx=sbx*1;
+					}else if(x-xb<-25&&x-xb>-35) {
+						sbx=(int)(xSpeed*-1.25);
+					}else if(x-xb<-15&&x-xb>-25) {
+						sbx=(int) (xSpeed*-1.5);
+					}else if(x-xb<-5&&x-xb>-15) {
+						sbx=(int) (xSpeed*-1.75);
+					}else {
+						sbx=xSpeed*-1;
+					}
 					sby=sby*-1;
+					
 				}
 				for(int i=0;i<bricks.size();i++) {
 					if(xb<bricks.get(i).bx()+bricks.get(i).BrickWidth()&&bricks.get(i).bx()<xb+ball.getWidth(null)&&yb<bricks.get(i).by()+bricks.get(i).BrickHeight()-10&&bricks.get(i).by()<yb+ball.getHeight(null)) {
-						System.out.println(bricks.get(i).bricksx+bricks.get(i).bricksy);
+						numOfB-=1;
+						if(numOfB<=0) {
+							win = true;
+							sbx=0;
+							sby=0;
+						}
 						sby=sby*-1;
 						bricks.remove(i);
 					}
@@ -174,7 +203,7 @@ public class brickerbrickeranime extends JPanel {
 			g2d.setFont(font);
 			g2d.setColor(Color.BLACK);
 			g2d.drawString("You win", 400, 400);
-		}else if(lose==true){
+		}else if(lose){
 			g2d.drawString("you lose",400,400);
 		}
 			
