@@ -10,13 +10,13 @@ import javax.swing.JTextField;
 
 public class Database {
 	
-	JTextField name;
+	
 	public Database(){
 	
 		
 	}
 	
-	public void playerName() {
+	public void playerName(String n) {
 		String sql ="INSERT INTO ArcadeTable Name Values ?";
 		try {
 			Connection conn = connect();
