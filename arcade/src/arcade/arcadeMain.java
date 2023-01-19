@@ -6,7 +6,7 @@ public class arcadeMain {
 		AnimationTetris p = new AnimationTetris();
 		//brickbreaker b = new brickbreaker();
 		
-		System.out.println("hi");
+		
 	}
 
 }
