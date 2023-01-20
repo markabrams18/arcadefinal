@@ -234,6 +234,7 @@ public class TetrisPanel extends JPanel {
 
 	
 	public void randomBlocks() {
+		//hlep
 
 		if (num == 1) {
 			randomSquare = rSquare;
