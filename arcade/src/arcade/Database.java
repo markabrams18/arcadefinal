@@ -10,21 +10,29 @@ import javax.swing.JTextField;
 
 public class Database {
 	
-	JTextField name;
+	int score;
+	String name;
 	public Database(){
-	
+		score =0;
+		name="";
 		
 	}
 	
-	public void playerName() {
+	public void playerName(String n) {
 		String sql ="INSERT INTO ArcadeTable Name Values ?";
 		try {
 			Connection conn = connect();
 			PreparedStatement ps = conn.prepareStatement(sql);
-			
+			ps.setString(1, n);
+			ps.executeUpdate();
+			ps.close();
+			conn.close();
 		}catch(SQLException e) {
-			
+			e.getMessage();
 		}
+		
+	}
+	public void playerScore(int n) {
 		
 	}
 	private Connection connect() {

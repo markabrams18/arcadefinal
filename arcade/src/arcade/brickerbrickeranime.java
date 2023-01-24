@@ -22,6 +22,7 @@ public class brickerbrickeranime extends JPanel {
 	final int HEIGHT =800;
 	JButton start;
 	Timer timer;
+	int score;
 	int xSpeed=5;
 	int ySpeed=5;
 	int sbx,sby=0;
@@ -43,6 +44,7 @@ public class brickerbrickeranime extends JPanel {
 	public brickerbrickeranime(){
 		bricks= new ArrayList<BbarrayList>();
 		start = new JButton();
+		score=0;
 		
 		this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 		this.setLocation(0, 0);
@@ -154,14 +156,17 @@ public class brickerbrickeranime extends JPanel {
 				}
 				for(int i=0;i<bricks.size();i++) {
 					if(xb<bricks.get(i).bx()+bricks.get(i).BrickWidth()&&bricks.get(i).bx()<xb+ball.getWidth(null)&&yb<bricks.get(i).by()+bricks.get(i).BrickHeight()-10&&bricks.get(i).by()<yb+ball.getHeight(null)) {
-						numOfB-=1;
+						
 						if(numOfB<=0) {
 							win = true;
 							sbx=0;
 							sby=0;
 						}
+						numOfB-=1;
 						sby=sby*-1;
 						bricks.remove(i);
+						score+=10;
+						System.out.println(score);
 					}
 				}
 				if(left) {
@@ -185,7 +190,7 @@ public class brickerbrickeranime extends JPanel {
 			}
 			
 		});
-		
+	
 		
 		timer.start();
 		
