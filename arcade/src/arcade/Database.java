@@ -10,9 +10,11 @@ import javax.swing.JTextField;
 
 public class Database {
 	
-	
+	int score;
+	String name;
 	public Database(){
-	
+		score =0;
+		name="";
 		
 	}
 	
@@ -21,10 +23,16 @@ public class Database {
 		try {
 			Connection conn = connect();
 			PreparedStatement ps = conn.prepareStatement(sql);
-			
+			ps.setString(1, n);
+			ps.executeUpdate();
+			ps.close();
+			conn.close();
 		}catch(SQLException e) {
-			
+			e.getMessage();
 		}
+		
+	}
+	public void playerScore(int n) {
 		
 	}
 	private Connection connect() {
