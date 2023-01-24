@@ -63,6 +63,33 @@ public class arcadeTitlePage {
 			}
 			
 		});
+		start2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e2) {
+				// TODO Auto-generated method stub
+				tetrist=true;
+			}
+			
+		});
+		start3.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e3) {
+				// TODO Auto-generated method stub
+				pongt=true;
+			}
+			
+		});
+		start4.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e4) {
+				// TODO Auto-generated method stub
+				pact=true;
+			}
+			
+		});
 		
 		
 		
@@ -91,8 +118,14 @@ public class arcadeTitlePage {
 		AnimationTetris t = new AnimationTetris();
 	}
 	public void getGame() {
-		if(brickt==true) {
+		if(brickt=true) {
 			brickbreaker b = new brickbreaker();
+		}else if(tetrist=true) {
+			AnimationTetris p = new AnimationTetris();
+		}else if(pongt=true) {
+			
+		}else if(pact=true) {
+			
 		}
 	}
 }

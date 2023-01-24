@@ -86,7 +86,7 @@ public class brickerbrickeranime extends JPanel {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				
+				System.out.println(e.getKeyCode());
 				switch(e.getKeyCode()) {
 				case 65: left=true; break;
 				

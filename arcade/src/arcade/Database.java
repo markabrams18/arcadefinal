@@ -40,7 +40,7 @@ public class Database {
 		try {
 			String url = "jdbc:sqlite:D:/SQLiteStudio/ArcadeDataBase.db";
 			conn = DriverManager.getConnection(url);
-			//System.out.println("Connection has been made");
+			System.out.println("Connection has been made");
 			
 		}catch(SQLException e) {
 			System.out.println(e.getMessage());
