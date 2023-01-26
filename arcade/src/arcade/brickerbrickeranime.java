@@ -51,7 +51,7 @@ public class brickerbrickeranime extends JPanel {
 		this.setFocusable(true);
 		paddle1=new ImageIcon("paddle.png").getImage();
 		brick= new ImageIcon("brick.png").getImage();
-		ball=new ImageIcon("ball.png").getImage();
+		ball=new ImageIcon("ball1.png").getImage();
 		bbbg=new ImageIcon("bbbg.png").getImage();
 		
 	
