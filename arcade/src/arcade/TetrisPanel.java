@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
@@ -33,12 +34,8 @@ public class TetrisPanel extends JPanel {
 	boolean spaceBar = false;
 	boolean cSave = false;
 
-	LBlock l = new LBlock();
-	TBlock t = new TBlock();
-	ZShape z = new ZShape();
-	OBlock o = new OBlock();
-	
-			
+	int po = 0;
+
 	// 297
 	int x = 52;
 	int y = 26;
@@ -51,11 +48,15 @@ public class TetrisPanel extends JPanel {
 	private final int brdWidth = 10;
 	private final int brdHeight = 24;
 
+	// random block color
 	int num = 0;
+	// random block piece
 	int random = 0;
 
 	int[][] temp = new int[3][3];
-	
+
+	int[] pieceOrder = new int[3];
+	ArrayList<Object> list = new ArrayList();
 
 	int tempx = 0;
 	int tempy = 0;
@@ -70,11 +71,11 @@ public class TetrisPanel extends JPanel {
 
 	boolean leftWall = false;
 	boolean rightWall = false;
-	
+
 	boolean flag = false;
-	
+
 	boolean bottomCheck = false;
-	
+
 	TetrisPanel() {
 
 		bgImage = new ImageIcon("TetrisBG.png").getImage();
@@ -83,16 +84,13 @@ public class TetrisPanel extends JPanel {
 		gSquare = new ImageIcon("greenBlock.png").getImage();
 		pSquare = new ImageIcon("purpleBlock.png").getImage();
 
-		Random r = new Random();
 		Random colorR = new Random();
 
-		num = r.nextInt(4) + 1;
+		makeOrder();
+		blocks();
 
-		System.out.println("Random Num Color Is: " + num);
-
-		random = r.nextInt(4) + 1;
-		System.out.println("Random Number is: " + random);
-
+		random();
+		
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		this.setFocusable(true);
 
@@ -106,9 +104,7 @@ public class TetrisPanel extends JPanel {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				// make boolean if its at the most left collumn and when its on the left most side 
-				
-				
+
 				switch (e.getKeyCode()) {
 				// left arrow
 				case 37:
@@ -116,8 +112,8 @@ public class TetrisPanel extends JPanel {
 						x -= 26;
 						System.out.println(x);
 					}
-					if(curX > 0 && leftWall == false) {
-						curX -=1;
+					if (curX > 0 && leftWall == false) {
+						curX -= 1;
 					}
 					break;
 
@@ -127,116 +123,125 @@ public class TetrisPanel extends JPanel {
 					if (turn == 5) {
 						turn = 1;
 					}
-					
-					if (random == 1) {
 
-						if (turn == 1) {
+					if (turn == 1) {
+						switch (pieceOrder[po]) {
+						case 1:
+							((LBlock) list.get(po)).upShape();
+							temp = ((LBlock) list.get(po)).getShape();
+							curX = 3;
+							break;
+						case 2:
+							((TBlock) list.get(po)).upShape();
+							temp = ((TBlock) list.get(po)).getShape();
+							curX = 3;
+							break;
+						case 3:
+							((OBlock) list.get(po)).upShape();
+							temp = ((OBlock) list.get(po)).getShape();
+							curX = 3;
+							break;
+						case 4:
+							((ZShape) list.get(po)).upShape();
+							temp = ((ZShape) list.get(po)).getShape();
+							curX = 3;
+							break;
 
-							l.upShape();
-
-						} else if (turn == 2) {
-
-							if (x < 0) {
-								x += 26;
-
-							}
-
-							l.rightShape();
-
-						} else if (turn == 3) {
-
-							
-							System.out.println(x);
-							if (x < 0) {
-								x += 26;
-							}
-							
-							if(tempSetUp[curX+2][curY+2] == 0 && tempSetUp[curX+2][curY+1] == 0 && tempSetUp[curX+2][curY] == 0 && rightWall == false) {
-								x+=26;
-							}
-							flag = true;
-							l.downShape();
-							
-						} else if (turn == 4) {
-
-							if (x < 0) {
-								x += 26;
-
-							}
-
-							l.leftShape();
 						}
 
-						temp = l.getShape();
+					} else if (turn == 2) {
 
-					} else if (random == 2) {
+						switch (pieceOrder[po]) {
+						case 1:
+							((LBlock) list.get(po)).rightShape();
+							temp = ((LBlock) list.get(po)).getShape();
+							curX = 3;
+							break;
+						case 2:
+							((TBlock) list.get(po)).rightShape();
+							temp = ((TBlock) list.get(po)).getShape();
+							curX = 3;
+							break;
+						case 3:
+							((OBlock) list.get(po)).upShape();
+							temp = ((OBlock) list.get(po)).getShape();
+							curX = 3;
+							break;
+						case 4:
+							((ZShape) list.get(po)).rightShape();
+							temp = ((ZShape) list.get(po)).getShape();
+							curX = 3;
+							break;
+						}
+						if (x < 0) {
+							x += 26;
 
-						if (turn == 1) {
-
-							if (x < 0) {
-								x += 26;
-							}
-
-							t.upShape();
-						} else if (turn == 2) {
-
-							t.rightShape();
-						} else if (turn == 3) {
-
-							if (x < 0) {
-								x += 26;
-							}
-
-							t.downShape();
-						} else if (turn == 4) {
-
-							if (x < 0) {
-								x += 26;
-							}
-
-							t.leftShape();
 						}
 
-						temp = t.getShape();
+					} else if (turn == 3) {
 
-					} else if (random == 3) {
+						switch (pieceOrder[po]) {
+						case 1:
+							((LBlock) list.get(po)).downShape();
+							temp = ((LBlock) list.get(po)).getShape();
+							curX = 3;
+							break;
+						case 2:
+							((TBlock) list.get(po)).downShape();
+							temp = ((TBlock) list.get(po)).getShape();
+							curX = 3;
+							break;
+						case 3:
+							((OBlock) list.get(po)).upShape();
+							temp = ((OBlock) list.get(po)).getShape();
+							curX = 3;
+							break;
+						case 4:
+							((ZShape) list.get(po)).downShape();
+							temp = ((ZShape) list.get(po)).getShape();
+							curX = 3;
+							break;
 
-						if (turn == 1) {
-
-							if (x < 0) {
-								x += 26;
-							}
-
-							z.upShape();
-						} else if (turn == 2) {
-
-							z.rightShape();
-						} else if (turn == 3) {
-
-							if (x < 0) {
-								x += 26;
-							}
-
-							z.downShape();
-						} else if (turn == 4) {
-
-							if (x < 0) {
-								x += 26;
-							}
-
-							z.leftShape();
 						}
 
-						temp = z.getShape();
-
-					} else if (random == 4) {
+						System.out.println(x);
 						if (x < 0) {
 							x += 26;
 						}
 
-						temp = o.getShape();
+						if (tempSetUp[curX + 2][curY + 2] == 0 && tempSetUp[curX + 2][curY + 1] == 0
+								&& tempSetUp[curX + 2][curY] == 0 && rightWall == false) {
+							x += 26;
+						}
+
+					} else if (turn == 4) {
+
+						switch (pieceOrder[po]) {
+						case 1:
+							((LBlock) list.get(po)).leftShape();
+							temp = ((LBlock) list.get(po)).getShape();
+							curX = 3;
+							break;
+						case 2:
+							((TBlock) list.get(po)).leftShape();
+							temp = ((TBlock) list.get(po)).getShape();
+							curX = 3;
+							break;
+						case 3:
+							((OBlock) list.get(po)).upShape();
+							temp = ((OBlock) list.get(po)).getShape();
+							curX = 3;
+							break;
+						case 4:
+							((ZShape) list.get(po)).leftShape();
+							temp = ((ZShape) list.get(po)).getShape();
+							curX = 3;
+							break;
+
+						}
+
 					}
-					
+
 					break;
 
 				// right arrow
@@ -244,20 +249,21 @@ public class TetrisPanel extends JPanel {
 					if (x < 200 && rightWall == false) {
 						x += 26;
 					}
-					
-					if(curX < 11 && rightWall == false) {
-						curX +=1;
+
+					if (curX < 11 && rightWall == false) {
+						curX += 1;
 					}
-					
+
 					break;
 				// down arrow
 				case 40:
 					if (y < 574 && bottomCheck == false) {
 						y += 26;
+						score += 2;
 					}
-					if(curY < tempSetUp[0].length && bottomCheck == false && curY < 21) {
-						curY +=1;
-					
+					if (curY < tempSetUp[0].length && bottomCheck == false && curY < 21) {
+						curY += 1;
+
 					}
 					break;
 
@@ -306,9 +312,30 @@ public class TetrisPanel extends JPanel {
 			}
 
 		});
-		random();
-		spawnBlocks();
-		
+	
+		switch (pieceOrder[po]) {
+		case 1:
+			((LBlock) list.get(po)).upShape();
+			temp = ((LBlock) list.get(po)).getShape();
+			curX = 3;
+			break;
+		case 2:
+			((TBlock) list.get(po)).upShape();
+			temp = ((TBlock) list.get(po)).getShape();
+			curX = 3;
+			break;
+		case 3:
+			((OBlock) list.get(po)).upShape();
+			temp = ((OBlock) list.get(po)).getShape();
+			curX = 3;
+			break;
+		case 4:
+			((ZShape) list.get(po)).upShape();
+			temp = ((ZShape) list.get(po)).getShape();
+			curX = 3;
+			break;
+
+		}
 		// pictures
 		bgImage = new ImageIcon("blackBG.png").getImage();
 		rSquare = new ImageIcon("redBlock.png").getImage();
@@ -320,12 +347,12 @@ public class TetrisPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				if(bottomCheck == true) {
-					random();
-					spawnBlocks();
+
+				if (bottomCheck == true) {
 				}
-				// stScore = Integer.toString(score);
+
+				stScore = Integer.toString(score);
+
 				repaint();
 			}
 
@@ -339,18 +366,18 @@ public class TetrisPanel extends JPanel {
 
 				if (y < 574) {
 					y += 26;
-				}else {
-					
+				} else {
+
 					bottomCheck = true;
-					
-					System.out.println(bottomCheck );
+
+					System.out.println(bottomCheck);
 
 				}
-				if(curY < tempSetUp[0].length && curY < 21) {
+				score += 2;
+				if (curY < tempSetUp[0].length && curY < 21) {
 					curY = curY + 1;
 				}
-				
-				
+
 			}
 
 		});
@@ -359,7 +386,10 @@ public class TetrisPanel extends JPanel {
 	}
 
 	public void random() {
-		
+		Random r = new Random();
+		random = r.nextInt(4) + 1;
+		num = r.nextInt(4) + 1;
+
 		if (num == 1) {
 			randomSquare = rSquare;
 
@@ -374,28 +404,61 @@ public class TetrisPanel extends JPanel {
 
 		}
 
-		if (random == 1) {
-			l.upShape();
-			temp = l.getShape();
+		System.out.println(po);
+		switch (pieceOrder[po]) {
+		case 1:
+			temp = ((LBlock) list.get(po)).getShape();
+			curX = 3;
+			break;
+		case 2:
+			temp = ((TBlock) list.get(po)).getShape();
+			curX = 3;
+			break;
+		case 3:
+			temp = ((OBlock) list.get(po)).getShape();
+			curX = 3;
+			break;
+		case 4:
+			temp = ((ZShape) list.get(po)).getShape();
+			curX = 3;
+			break;
 
-		} else if (random == 2) {
-			t.upShape();
-			temp = t.getShape();
+		}
 
-		} else if (random == 3) {
-			z.upShape();
-			temp = z.getShape();
+	}
 
-		} else if (random == 4) {
+	public void makeOrder() {
+		Random q = new Random();
 
-			o.upShape();
-			temp = o.getShape();
+		for (int i = 0; i < pieceOrder.length; i++) {
+			pieceOrder[i] = q.nextInt(4) + 1;
+			
 		}
 	}
-	public void spawnBlocks() {
-		//hlep
+
+	public void blocks() {
+
+		for (int i = 0; i < pieceOrder.length; i++) {
+			switch (pieceOrder[i]) {
+			case 1:
+				list.add(new LBlock());
+				break;
+			case 2:
+				list.add(new TBlock());
+				break;
+			case 3:
+				list.add(new OBlock());
+				break;
+			case 4:
+				list.add(new ZShape());
+				break;
+
+			}
+
+		}
 
 	}
+
 	public void setUpPrint() {
 		for (int j = 0; j < tempSetUp[0].length; j++) {
 			for (int i = 0; i < tempSetUp.length; i++) {
@@ -412,15 +475,13 @@ public class TetrisPanel extends JPanel {
 
 				tempSetUp[i][j] = 0;
 				/**
-				if (i == 0 || i == 11) {
-					tempSetUp[i][j] = 1;
-				} else if (j == 24) {
-					tempSetUp[i][j] = 1;
-				}
-				*/
+				 * if (i == 0 || i == 11) { tempSetUp[i][j] = 1; } else if (j == 24) {
+				 * tempSetUp[i][j] = 1; }
+				 */
 			}
 		}
 	}
+
 	public void finalPrint() {
 		for (int j = 0; j < currPos[0].length; j++) {
 			for (int i = 0; i < currPos.length; i++) {
@@ -446,8 +507,6 @@ public class TetrisPanel extends JPanel {
 	public void paint(Graphics g) {
 		Graphics2D g2D = (Graphics2D) g;
 		tempSetUp();
-		
-		
 
 		g2D.drawImage(bgImage, 0, 0, null);
 
@@ -463,59 +522,56 @@ public class TetrisPanel extends JPanel {
 			g2D.drawLine(i * blockSize, 0, i * blockSize, brdHeight * 26);
 		}
 
-		/**
-		 * Font font = new Font("Serif", Font.PLAIN, 40); g2D.setFont(font);
-		 * g2D.setColor(Color.white); g2D.drawString(stScore, 50,100);
-		 */
+		Font font = new Font("Serif", Font.PLAIN, 40);
+		g2D.setFont(font);
+		g2D.setColor(Color.white);
+		g2D.drawString(stScore, 400, 100);
 
-		
-
-		
 		if (temp[0][0] == 1) {
 			tempx = x - 26;
 			tempy = y - 26;
 			g2D.drawImage(randomSquare, tempx, tempy, null);
 
 			tempSetUp[curX][curY] = 1;
-			
-			if(bottomCheck == true) {
-				currPos[curX][curY] =1;
+
+			if (bottomCheck == true) {
+				currPos[curX][curY] = 1;
 			}
-			
+
 		}
 		if (temp[1][0] == 1) {
 			tempx = x;
 			tempy = y - 26;
 			g2D.drawImage(randomSquare, tempx, tempy, null);
-			
-			if(curX +1 > tempSetUp[0].length) {
-				curX -=1;
-				tempSetUp[curX+1][curY] = 1;
-			}else {
+
+			if (curX + 1 > tempSetUp[0].length) {
+				curX -= 1;
+				tempSetUp[curX + 1][curY] = 1;
+			} else {
 				tempSetUp[curX + 1][curY] = 1;
 			}
-			
-			if(bottomCheck == true) {
-				currPos[curX+1][curY] =1;
+
+			if (bottomCheck == true) {
+				currPos[curX + 1][curY] = 1;
 			}
-			
+
 		}
 		if (temp[2][0] == 1) {
 			tempx = x + 26;
 			tempy = y - 26;
 			g2D.drawImage(randomSquare, tempx, tempy, null);
-			
-			if(curX +2 > tempSetUp[0].length) {
+
+			if (curX + 2 > tempSetUp[0].length) {
 				curX = curX - 2;
 				tempSetUp[curX + 2][curY] = 1;
-			}else {
+			} else {
 				tempSetUp[curX + 2][curY] = 1;
 			}
-			
-			if(bottomCheck == true) {
-				currPos[curX+2][curY] =1;
+
+			if (bottomCheck == true) {
+				currPos[curX + 2][curY] = 1;
 			}
-			
+
 		}
 		if (temp[0][1] == 1) {
 			tempx = x - 26;
@@ -523,43 +579,43 @@ public class TetrisPanel extends JPanel {
 			g2D.drawImage(randomSquare, tempx, tempy, null);
 
 			tempSetUp[curX][curY + 1] = 1;
-			
-			if(bottomCheck == true) {
-				currPos[curX][curY+1] =1;
+
+			if (bottomCheck == true) {
+				currPos[curX][curY + 1] = 1;
 			}
-			
+
 		}
 		if (temp[1][1] == 1) {
 			tempx = x;
 			tempy = y;
 			g2D.drawImage(randomSquare, tempx, tempy, null);
-			
-			if(curX+1 > tempSetUp[0].length) {
-				curX =curX -1;
+
+			if (curX + 1 > tempSetUp[0].length) {
+				curX = curX - 1;
 				tempSetUp[curX + 1][curY + 1] = 1;
-			}else {
+			} else {
 				tempSetUp[curX + 1][curY + 1] = 1;
 			}
-			
-			if(bottomCheck == true) {
-				currPos[curX+1][curY+1] =1;
+
+			if (bottomCheck == true) {
+				currPos[curX + 1][curY + 1] = 1;
 			}
-			
+
 		}
 		if (temp[2][1] == 1) {
 			tempx = x + 26;
 			tempy = y;
 			g2D.drawImage(randomSquare, tempx, tempy, null);
 
-			if(curX +2 > tempSetUp[0].length) {
+			if (curX + 2 > tempSetUp[0].length) {
 				curX = curX - 2;
-				tempSetUp[curX + 2][curY+1] = 1;
-			}else {
-				tempSetUp[curX + 2][curY+1] = 1;
+				tempSetUp[curX + 2][curY + 1] = 1;
+			} else {
+				tempSetUp[curX + 2][curY + 1] = 1;
 			}
-			
-			if(bottomCheck == true) {
-				currPos[curX+2][curY +1] =1;
+
+			if (bottomCheck == true) {
+				currPos[curX + 2][curY + 1] = 1;
 			}
 
 		}
@@ -570,25 +626,25 @@ public class TetrisPanel extends JPanel {
 
 			tempSetUp[curX][curY + 2] = 1;
 
-			if(bottomCheck == true) {
-				currPos[curX][curY+2] =1;
+			if (bottomCheck == true) {
+				currPos[curX][curY + 2] = 1;
 			}
-			
+
 		}
 		if (temp[1][2] == 1) {
 			tempx = x;
 			tempy = y + 26;
 			g2D.drawImage(randomSquare, tempx, tempy, null);
 
-			if(curX +1 > tempSetUp[0].length) {
+			if (curX + 1 > tempSetUp[0].length) {
 				curX = curX - 1;
-				tempSetUp[curX + 1][curY+2] = 1;
-			}else {
-				tempSetUp[curX + 1][curY+2] = 1;
+				tempSetUp[curX + 1][curY + 2] = 1;
+			} else {
+				tempSetUp[curX + 1][curY + 2] = 1;
 			}
-			
-			if(bottomCheck == true) {
-				currPos[curX+1][curY+2] =1;
+
+			if (bottomCheck == true) {
+				currPos[curX + 1][curY + 2] = 1;
 			}
 
 		}
@@ -597,27 +653,28 @@ public class TetrisPanel extends JPanel {
 			tempy = y + 26;
 			g2D.drawImage(randomSquare, tempx, tempy, null);
 
-			if(curX +2 >tempSetUp[0].length) {
+			if (curX + 2 > tempSetUp[0].length) {
 				curX = curX - 2;
-				tempSetUp[curX + 2][curY+2] = 1;
-			}else {
-				tempSetUp[curX + 2][curY+2] = 1;
+				tempSetUp[curX + 2][curY + 2] = 1;
+			} else {
+				tempSetUp[curX + 2][curY + 2] = 1;
 			}
-			
-			if(bottomCheck == true) {
-				currPos[curX+2][curY+2] =1;
+
+			if (bottomCheck == true) {
+				currPos[curX + 2][curY + 2] = 1;
 			}
 		}
-		if(curX == 1) {
+		if (curX == 1) {
 			leftWall = true;
-			
-		}else if(curX == 11) {
+
+		} else if (curX == 11) {
 			rightWall = true;
-			
+
 		}
 		System.out.println(curY + "Y AXIS");
 		
-		finalPrint();
+		System.out.println("Current POS" + po);
+		//finalPrint();
 		System.out.println("");
 	}
 }
