@@ -117,13 +117,13 @@ public class arcadeTitlePage {
 			@Override
 			public void actionPerformed(ActionEvent e1) {
 				// TODO Auto-generated method stub
-					frame.setVisible(false);
+				
 					brickbreaker b = new brickbreaker();
 					
-					
+					b.frame.remove(panel);
 					
 				if(exit1==true){
-					System.out.println("1");
+					System.out.println("beta");
 					getMenu();
 				}
 				
@@ -138,7 +138,6 @@ public class arcadeTitlePage {
 			public void actionPerformed(ActionEvent e2) {
 				// TODO Auto-generated method stub
 				if(exit1==false) {
-					frame.setVisible(false);
 					AnimationTetris p = new AnimationTetris();
 				}
 				
